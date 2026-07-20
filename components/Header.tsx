@@ -1,51 +1,58 @@
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import Logo from '@/data/logo.svg'
 import Link from './Link'
+import SectionContainer from './SectionContainer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
 
 const Header = () => {
-  let headerClass = 'flex items-center w-full bg-white dark:bg-gray-950 justify-between py-10'
+  let headerClass =
+    'w-full border-b border-gray-200/80 bg-gray-50/95 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/92'
   if (siteMetadata.stickyNav) {
     headerClass += ' sticky top-0 z-50'
   }
 
   return (
     <header className={headerClass}>
-      <Link href="/" aria-label={siteMetadata.headerTitle}>
-        <div className="flex items-center justify-between">
-          <div className="mr-3">
-            <Logo />
+      <SectionContainer>
+        <div className="flex h-16 items-center justify-between sm:h-[72px]">
+          <Link
+            href="/"
+            aria-label={siteMetadata.headerTitle}
+            className="group flex items-center gap-3"
+          >
+            <span className="bg-primary-500 group-hover:bg-primary-600 flex h-9 w-9 items-center justify-center rounded-lg text-sm font-semibold text-white transition-colors">
+              SR
+            </span>
+            <span className="font-display text-xl tracking-[-0.03em] text-gray-950 dark:text-gray-50">
+              Seongrok Lee
+            </span>
+          </Link>
+          <div className="flex items-center gap-2 leading-5 sm:gap-3">
+            <nav
+              className="no-scrollbar hidden items-center gap-6 overflow-x-auto md:flex"
+              aria-label="주요 메뉴"
+            >
+              {headerNavLinks
+                .filter((link) => link.href !== '/')
+                .map((link) => (
+                  <Link
+                    key={link.title}
+                    href={link.href}
+                    className="hover:text-primary-600 dark:hover:text-primary-400 text-sm font-medium text-gray-700 transition-colors dark:text-gray-300"
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+            </nav>
+            <span className="mx-1 hidden h-5 w-px bg-gray-200 md:block dark:bg-gray-800" />
+            <SearchButton />
+            <ThemeSwitch />
+            <MobileNav />
           </div>
-          {typeof siteMetadata.headerTitle === 'string' ? (
-            <div className="hidden h-6 text-2xl font-semibold sm:block">
-              {siteMetadata.headerTitle}
-            </div>
-          ) : (
-            siteMetadata.headerTitle
-          )}
         </div>
-      </Link>
-      <div className="flex items-center space-x-4 leading-5 sm:-mr-6 sm:space-x-6">
-        <div className="no-scrollbar hidden max-w-40 items-center gap-x-4 overflow-x-auto sm:flex md:max-w-72 lg:max-w-96">
-          {headerNavLinks
-            .filter((link) => link.href !== '/')
-            .map((link) => (
-              <Link
-                key={link.title}
-                href={link.href}
-                className="hover:text-primary-500 dark:hover:text-primary-400 m-1 font-medium text-gray-900 dark:text-gray-100"
-              >
-                {link.title}
-              </Link>
-            ))}
-        </div>
-        <SearchButton />
-        <ThemeSwitch />
-        <MobileNav />
-      </div>
+      </SectionContainer>
     </header>
   )
 }
