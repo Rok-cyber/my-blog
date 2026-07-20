@@ -1,12 +1,28 @@
+'use client'
+
 import siteMetadata from '@/data/siteMetadata'
-import headerNavLinks from '@/data/headerNavLinks'
+import headerNavLinks, { englishHeaderNavLinks } from '@/data/headerNavLinks'
 import Link from './Link'
 import SectionContainer from './SectionContainer'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { getLanguageSwitchHref, localeFromPathname } from '@/lib/i18n'
+import translationData from '../app/translation-data.json'
 
 const Header = () => {
+  const pathname = usePathname()
+  const locale = localeFromPathname(pathname)
+  const isEnglish = locale === 'en'
+  const navLinks = isEnglish ? englishHeaderNavLinks : headerNavLinks
+  const languageHref = getLanguageSwitchHref(pathname, translationData as Record<string, string>)
+
+  useEffect(() => {
+    document.documentElement.lang = isEnglish ? 'en' : 'ko'
+  }, [isEnglish])
+
   let headerClass =
     'w-full border-b border-gray-200/80 bg-gray-50/95 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/92'
   if (siteMetadata.stickyNav) {
@@ -18,7 +34,7 @@ const Header = () => {
       <SectionContainer>
         <div className="flex h-16 items-center justify-between sm:h-[72px]">
           <Link
-            href="/"
+            href={isEnglish ? '/en' : '/'}
             aria-label={siteMetadata.headerTitle}
             className="group flex items-center gap-3"
           >
@@ -32,10 +48,10 @@ const Header = () => {
           <div className="flex items-center gap-2 leading-5 sm:gap-3">
             <nav
               className="no-scrollbar hidden items-center gap-6 overflow-x-auto md:flex"
-              aria-label="주요 메뉴"
+              aria-label={isEnglish ? 'Primary navigation' : '주요 메뉴'}
             >
-              {headerNavLinks
-                .filter((link) => link.href !== '/')
+              {navLinks
+                .filter((link) => link.href !== (isEnglish ? '/en' : '/'))
                 .map((link) => (
                   <Link
                     key={link.title}
@@ -47,9 +63,17 @@ const Header = () => {
                 ))}
             </nav>
             <span className="mx-1 hidden h-5 w-px bg-gray-200 md:block dark:bg-gray-800" />
+            <Link
+              href={languageHref}
+              hrefLang={isEnglish ? 'ko' : 'en'}
+              className="hover:border-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hidden min-h-9 items-center rounded-full border border-gray-300 px-3 text-xs font-semibold transition-colors sm:inline-flex dark:border-gray-700"
+              aria-label={isEnglish ? '한국어로 보기' : 'View in English'}
+            >
+              {isEnglish ? '한국어' : 'EN'}
+            </Link>
             <SearchButton />
             <ThemeSwitch />
-            <MobileNav />
+            <MobileNav links={navLinks} languageHref={languageHref} isEnglish={isEnglish} />
           </div>
         </div>
       </SectionContainer>

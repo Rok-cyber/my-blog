@@ -46,11 +46,21 @@ const computedFields: ComputedFields = {
   readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
   slug: {
     type: 'string',
-    resolve: (doc) => doc._raw.flattenedPath.replace(/^.+?(\/)/, ''),
+    resolve: (doc) => {
+      if (doc._raw.flattenedPath.startsWith('blog/')) {
+        return doc._raw.flattenedPath.replace(/^blog\/(?:en\/)?/, '')
+      }
+      return doc._raw.flattenedPath.replace(/^.+?(\/)/, '')
+    },
   },
   path: {
     type: 'string',
-    resolve: (doc) => doc._raw.flattenedPath,
+    resolve: (doc) => {
+      if (doc._raw.flattenedPath.startsWith('blog/en/')) {
+        return `en/blog/${doc._raw.flattenedPath.replace(/^blog\/en\//, '')}`
+      }
+      return doc._raw.flattenedPath
+    },
   },
   filePath: {
     type: 'string',
@@ -63,21 +73,35 @@ const computedFields: ComputedFields = {
  * Count the occurrences of all tags across blog posts and write to json file
  */
 async function createTagCount(allBlogs) {
-  const tagCount: Record<string, number> = {}
-  allBlogs.forEach((file) => {
-    if (file.tags && (!isProduction || file.draft !== true)) {
-      file.tags.forEach((tag) => {
-        const formattedTag = slug(tag)
-        if (formattedTag in tagCount) {
-          tagCount[formattedTag] += 1
-        } else {
-          tagCount[formattedTag] = 1
-        }
-      })
-    }
-  })
+  const countTags = (language: 'ko' | 'en') => {
+    const tagCount: Record<string, number> = {}
+    allBlogs.forEach((file) => {
+      if (
+        (file.language || 'ko') === language &&
+        file.tags &&
+        (!isProduction || file.draft !== true)
+      ) {
+        file.tags.forEach((tag) => {
+          const formattedTag = slug(tag)
+          if (formattedTag in tagCount) {
+            tagCount[formattedTag] += 1
+          } else {
+            tagCount[formattedTag] = 1
+          }
+        })
+      }
+    })
+    return tagCount
+  }
+
+  const tagCount = countTags('ko')
+  const englishTagCount = countTags('en')
   const formatted = await prettier.format(JSON.stringify(tagCount, null, 2), { parser: 'json' })
+  const englishFormatted = await prettier.format(JSON.stringify(englishTagCount, null, 2), {
+    parser: 'json',
+  })
   writeFileSync('./app/tag-data.json', formatted)
+  writeFileSync('./app/en/tag-data.json', englishFormatted)
 }
 
 function createSearchIndex(allBlogs) {
@@ -87,10 +111,36 @@ function createSearchIndex(allBlogs) {
   ) {
     writeFileSync(
       `public/${path.basename(siteMetadata.search.kbarConfig.searchDocumentsPath)}`,
-      JSON.stringify(allCoreContent(sortPosts(allBlogs)))
+      JSON.stringify(allCoreContent(sortPosts(allBlogs.filter((post) => post.draft !== true))))
     )
     console.log('Local search index generated...')
   }
+}
+
+async function createTranslationMap(allBlogs) {
+  const translationMap: Record<string, string> = {}
+  const translationKeys = new Set(
+    allBlogs
+      .filter((post) => post.translationKey && post.draft !== true)
+      .map((post) => post.translationKey)
+  )
+
+  translationKeys.forEach((translationKey) => {
+    const matches = allBlogs.filter(
+      (post) => post.translationKey === translationKey && post.draft !== true
+    )
+    const koreanPost = matches.find((post) => (post.language || 'ko') === 'ko')
+    const englishPost = matches.find((post) => post.language === 'en')
+    if (koreanPost && englishPost) {
+      translationMap[`/${koreanPost.path}`] = `/${englishPost.path}`
+      translationMap[`/${englishPost.path}`] = `/${koreanPost.path}`
+    }
+  })
+
+  const formatted = await prettier.format(JSON.stringify(translationMap, null, 2), {
+    parser: 'json',
+  })
+  writeFileSync('./app/translation-data.json', formatted)
 }
 
 export const Blog = defineDocumentType(() => ({
@@ -100,6 +150,8 @@ export const Blog = defineDocumentType(() => ({
   fields: {
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
+    language: { type: 'string', default: 'ko' },
+    translationKey: { type: 'string' },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     lastmod: { type: 'date' },
     draft: { type: 'boolean' },
@@ -122,7 +174,11 @@ export const Blog = defineDocumentType(() => ({
         dateModified: doc.lastmod || doc.date,
         description: doc.summary,
         image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
-        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+        inLanguage: doc.language === 'en' ? 'en-US' : 'ko-KR',
+        url:
+          doc.language === 'en'
+            ? `${siteMetadata.siteUrl}/en/blog/${doc._raw.flattenedPath.replace(/^blog\/en\//, '')}`
+            : `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
       }),
     },
   },
@@ -181,7 +237,8 @@ export default makeSource({
   },
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
-    createTagCount(allBlogs)
+    await createTagCount(allBlogs)
+    await createTranslationMap(allBlogs)
     createSearchIndex(allBlogs)
   },
 })

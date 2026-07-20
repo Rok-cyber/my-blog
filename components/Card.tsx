@@ -1,12 +1,24 @@
 import Image from './Image'
 import Link from './Link'
 
-const Card = ({ title, description, imgSrc, href }) => (
+interface CardProps {
+  title: string
+  description: string
+  imgSrc?: string
+  href?: string
+  locale?: 'ko' | 'en'
+}
+
+const Card = ({ title, description, imgSrc, href, locale = 'ko' }: CardProps) => (
   <article className="card-surface group overflow-hidden">
     <div className="flex h-full flex-col">
       {imgSrc &&
         (href ? (
-          <Link href={href} aria-label={`${title} 보기`} className="overflow-hidden">
+          <Link
+            href={href}
+            aria-label={locale === 'en' ? `View ${title}` : `${title} 보기`}
+            className="overflow-hidden"
+          >
             <Image
               alt={title}
               src={imgSrc}
@@ -27,7 +39,7 @@ const Card = ({ title, description, imgSrc, href }) => (
       <div className="flex flex-1 flex-col p-7">
         <h2 className="font-display mb-4 text-3xl leading-tight tracking-[-0.04em]">
           {href ? (
-            <Link href={href} aria-label={`${title} 보기`}>
+            <Link href={href} aria-label={locale === 'en' ? `View ${title}` : `${title} 보기`}>
               {title}
             </Link>
           ) : (
@@ -36,8 +48,12 @@ const Card = ({ title, description, imgSrc, href }) => (
         </h2>
         <p className="mb-7 flex-1 leading-7 text-gray-600 dark:text-gray-400">{description}</p>
         {href && (
-          <Link href={href} className="text-link inline-flex" aria-label={`${title} 자세히 보기`}>
-            자세히 보기 <span aria-hidden="true">→</span>
+          <Link
+            href={href}
+            className="text-link inline-flex"
+            aria-label={locale === 'en' ? `Learn more about ${title}` : `${title} 자세히 보기`}
+          >
+            {locale === 'en' ? 'Learn more' : '자세히 보기'} <span aria-hidden="true">→</span>
           </Link>
         )}
       </div>

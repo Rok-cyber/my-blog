@@ -25,13 +25,16 @@ yarn serve
 
 ## Content
 
-- 글: `data/blog/*.mdx`
+- 한국어 글: `data/blog/*.mdx`
+- 영어 AI Outlook: `data/blog/en/*.mdx`
 - 작성자 소개: `data/authors/default.mdx`
 - 프로젝트: `data/projectsData.ts`
 - 사이트 메타데이터: `data/siteMetadata.js`
 - 디자인 토큰과 전역 스타일: `css/tailwind.css`
 
-글의 frontmatter는 최소한 `title`, `date`, `summary`, `tags`, `draft`를 포함합니다. 태그 인덱스, 검색 문서, 사이트맵과 RSS는 빌드 과정에서 생성됩니다.
+글의 frontmatter는 최소한 `title`, `date`, `summary`, `tags`, `draft`를 포함합니다. 영어 글에는 `language: en`과 `authors: [default-en]`을 추가합니다. 직접 대응하는 번역본이 있다면 두 파일에 동일한 `translationKey`를 지정합니다.
+
+영어판은 `/en`에서 제공되며 AI 시황, 기술 변화, 에이전트 시스템과 미래 전망을 격주로 발행하는 구조입니다. 언어별 태그 인덱스, 검색 문서, 사이트맵과 RSS는 빌드 과정에서 자동 생성됩니다.
 
 ## Structure
 

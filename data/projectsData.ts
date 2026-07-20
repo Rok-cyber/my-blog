@@ -29,4 +29,26 @@ const projectsData: Project[] = [
   },
 ]
 
+export const englishProjectsData: Project[] = [
+  {
+    title: 'AI Systems & Governance',
+    description:
+      'Research on agent authority, accountability, auditability, and the evidence required to prove real-world value.',
+    imgSrc: '/og.png',
+    href: '/en/blog',
+  },
+  {
+    title: 'UNDERGROUND DAEGU',
+    description:
+      'A long-term strategy connecting hidden urban history with place, narrative, policy, and new public experiences.',
+    imgSrc: '/static/images/d1_1.png',
+  },
+  {
+    title: 'Dalseong Tombs Research Archive',
+    description:
+      'Research into a lost urban heritage site and the possibilities of restoration, public space, and collaborative governance.',
+    imgSrc: '/static/images/d1_11.png',
+  },
+]
+
 export default projectsData
