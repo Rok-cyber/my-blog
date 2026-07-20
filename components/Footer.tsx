@@ -4,32 +4,31 @@ import SocialIcon from '@/components/social-icons'
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="mt-16 flex flex-col items-center">
-        <div className="mb-3 flex space-x-4">
-          <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={6} />
-          <SocialIcon kind="github" href={siteMetadata.github} size={6} />
-          <SocialIcon kind="facebook" href={siteMetadata.facebook} size={6} />
-          <SocialIcon kind="youtube" href={siteMetadata.youtube} size={6} />
-          <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={6} />
-          <SocialIcon kind="twitter" href={siteMetadata.twitter} size={6} />
-          <SocialIcon kind="bluesky" href={siteMetadata.bluesky} size={6} />
-          <SocialIcon kind="x" href={siteMetadata.x} size={6} />
-          <SocialIcon kind="instagram" href={siteMetadata.instagram} size={6} />
-          <SocialIcon kind="threads" href={siteMetadata.threads} size={6} />
-          <SocialIcon kind="medium" href={siteMetadata.medium} size={6} />
+    <footer className="mt-24 bg-gray-950 text-gray-100">
+      <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.5fr_1fr] lg:px-10 lg:py-16">
+        <div>
+          <p className="text-primary-400 mb-4 text-xs font-semibold tracking-[0.18em] uppercase">
+            AI Systems · Agents · Governance
+          </p>
+          <p className="font-display max-w-xl text-3xl leading-tight tracking-[-0.04em] sm:text-4xl">
+            AI 시스템을 연구하고, 실제 운영과 공공의 미래에 적용합니다.
+          </p>
         </div>
-        <div className="mb-2 flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
-          <div>{siteMetadata.author}</div>
-          <div>{` • `}</div>
-          <div>{`© ${new Date().getFullYear()}`}</div>
-          <div>{` • `}</div>
-          <Link href="/">{siteMetadata.title}</Link>
-        </div>
-        <div className="mb-8 text-sm text-gray-500 dark:text-gray-400">
-          <Link href="https://github.com/timlrx/tailwind-nextjs-starter-blog">
-            Tailwind Nextjs Theme
-          </Link>
+        <div className="flex flex-col justify-between gap-8 md:items-end">
+          <div className="flex gap-5 text-gray-300">
+            <SocialIcon kind="mail" href={`mailto:${siteMetadata.email}`} size={5} />
+            <SocialIcon kind="github" href={siteMetadata.github} size={5} />
+            <SocialIcon kind="linkedin" href={siteMetadata.linkedin} size={5} />
+            <SocialIcon kind="instagram" href={siteMetadata.instagram} size={5} />
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
+            <Link href="/blog">글</Link>
+            <Link href="/projects">프로젝트</Link>
+            <Link href="/about">소개</Link>
+          </div>
+          <p className="text-xs text-gray-500">
+            © {new Date().getFullYear()} {siteMetadata.author}. Built with care.
+          </p>
         </div>
       </div>
     </footer>

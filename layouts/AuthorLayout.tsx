@@ -9,39 +9,41 @@ interface Props {
 }
 
 export default function AuthorLayout({ children, content }: Props) {
-  const { name, avatar, occupation, company, email, twitter, bluesky, linkedin, github } = content
+  const { name, avatar, occupation, company, email, linkedin, github } = content
 
   return (
     <>
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
-        <div className="space-y-2 pt-6 pb-8 md:space-y-5">
-          <h1 className="text-3xl leading-9 font-extrabold tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 dark:text-gray-100">
-            About
+      <div className="py-14 sm:py-20">
+        <div className="max-w-4xl">
+          <p className="eyebrow">About</p>
+          <h1 className="font-display mt-4 text-5xl leading-[1.05] tracking-[-0.055em] sm:text-7xl">
+            AI를 중심으로,
+            <span className="text-primary-600 dark:text-primary-400 block">
+              실제 세계에 작동할 구조를 찾습니다.
+            </span>
           </h1>
         </div>
-        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
-          <div className="flex flex-col items-center space-x-2 pt-8">
+        <div className="mt-14 grid items-start gap-10 border-t border-gray-200 pt-10 lg:grid-cols-[320px_1fr] lg:gap-16 dark:border-gray-800">
+          <aside className="rounded-2xl bg-gray-100 p-7 dark:bg-gray-900">
             {avatar && (
               <Image
                 src={avatar}
-                alt="avatar"
-                width={192}
-                height={192}
-                className="h-48 w-48 rounded-full"
+                alt={`${name} 프로필 사진`}
+                width={320}
+                height={320}
+                className="aspect-square w-full rounded-xl object-cover"
               />
             )}
-            <h3 className="pt-4 pb-2 text-2xl leading-8 font-bold tracking-tight">{name}</h3>
-            <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
-            <div className="text-gray-500 dark:text-gray-400">{company}</div>
-            <div className="flex space-x-3 pt-6">
+            <h2 className="font-display pt-6 text-3xl tracking-[-0.04em]">{name}</h2>
+            <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-400">{occupation}</p>
+            <p className="mt-1 text-sm leading-6 text-gray-500">{company}</p>
+            <div className="mt-6 flex space-x-4 border-t border-gray-200 pt-5 dark:border-gray-800">
               <SocialIcon kind="mail" href={`mailto:${email}`} />
               <SocialIcon kind="github" href={github} />
               <SocialIcon kind="linkedin" href={linkedin} />
-              <SocialIcon kind="x" href={twitter} />
-              <SocialIcon kind="bluesky" href={bluesky} />
             </div>
-          </div>
-          <div className="prose dark:prose-invert max-w-none pt-8 pb-8 xl:col-span-2">
+          </aside>
+          <div className="prose dark:prose-invert max-w-none pb-8 text-[1.06rem] leading-8">
             {children}
           </div>
         </div>

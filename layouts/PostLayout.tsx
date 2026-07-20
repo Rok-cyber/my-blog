@@ -3,23 +3,11 @@ import { CoreContent } from 'pliny/utils/contentlayer'
 import type { Blog, Authors } from 'contentlayer/generated'
 import Comments from '@/components/Comments'
 import Link from '@/components/Link'
-import PageTitle from '@/components/PageTitle'
-import SectionContainer from '@/components/SectionContainer'
 import Image from '@/components/Image'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-
-const editUrl = (path) => `${siteMetadata.siteRepo}/blob/main/data/${path}`
-const discussUrl = (path) =>
-  `https://mobile.twitter.com/search?q=${encodeURIComponent(`${siteMetadata.siteUrl}/${path}`)}`
-
-const postDateTemplate: Intl.DateTimeFormatOptions = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-}
+import { formatDate } from '@/lib/formatDate'
 
 interface LayoutProps {
   content: CoreContent<Blog>
@@ -30,139 +18,130 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { filePath, path, slug, date, title, tags } = content
+  const { path, slug, date, title, summary, tags, readingTime } = content
   const basePath = path.split('/')[0]
 
   return (
-    <SectionContainer>
+    <>
       <ScrollTopAndComment />
-      <article>
-        <div className="xl:divide-y xl:divide-gray-200 xl:dark:divide-gray-700">
-          <header className="pt-6 xl:pb-6">
-            <div className="space-y-1 text-center">
-              <dl className="space-y-10">
-                <div>
-                  <dt className="sr-only">Published on</dt>
-                  <dd className="text-base leading-6 font-medium text-gray-500 dark:text-gray-400">
-                    <time dateTime={date}>
-                      {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
-                    </time>
-                  </dd>
+      <article className="py-14 sm:py-20">
+        <header className="mx-auto max-w-5xl text-center">
+          <p className="eyebrow">Field note</p>
+          <h1 className="font-display mt-5 text-[clamp(2.7rem,6vw,5.8rem)] leading-[1.02] tracking-[-0.06em] text-gray-950 dark:text-gray-50">
+            {title}
+          </h1>
+          {summary && (
+            <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-gray-600 sm:text-xl dark:text-gray-400">
+              {summary}
+            </p>
+          )}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+            <time dateTime={date}>{formatDate(date)}</time>
+            <span aria-hidden="true">·</span>
+            <span>{Math.max(1, Math.round(readingTime?.minutes || 1))}분 읽기</span>
+            <span aria-hidden="true">·</span>
+            <span>{authorDetails.map((author) => author.name).join(', ')}</span>
+          </div>
+        </header>
+
+        <div className="mt-12 border-t border-gray-200 pt-10 dark:border-gray-800">
+          <div className="mx-auto grid max-w-5xl items-start gap-10 lg:grid-cols-[180px_minmax(0,760px)] lg:gap-16">
+            <aside className="lg:sticky lg:top-28">
+              {authorDetails.map((author) => (
+                <div key={author.name} className="flex items-center gap-3 lg:block">
+                  {author.avatar && (
+                    <Image
+                      src={author.avatar}
+                      width={56}
+                      height={56}
+                      alt={`${author.name} 프로필`}
+                      className="h-12 w-12 rounded-full object-cover lg:h-14 lg:w-14"
+                    />
+                  )}
+                  <div className="lg:mt-3">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                      {author.name}
+                    </p>
+                    <Link
+                      href="/about"
+                      className="text-primary-700 dark:text-primary-400 mt-1 text-xs font-medium"
+                    >
+                      프로필 보기
+                    </Link>
+                  </div>
                 </div>
-              </dl>
-              <div>
-                <PageTitle>{title}</PageTitle>
-              </div>
-            </div>
-          </header>
-          <div className="grid-rows-[auto_1fr] divide-y divide-gray-200 pb-8 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0 dark:divide-gray-700">
-            <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
-              <dt className="sr-only">Authors</dt>
-              <dd>
-                <ul className="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-y-8 xl:space-x-0">
-                  {authorDetails.map((author) => (
-                    <li className="flex items-center space-x-2" key={author.name}>
-                      {author.avatar && (
-                        <Image
-                          src={author.avatar}
-                          width={38}
-                          height={38}
-                          alt="avatar"
-                          className="h-10 w-10 rounded-full"
-                        />
-                      )}
-                      <dl className="text-sm leading-5 font-medium whitespace-nowrap">
-                        <dt className="sr-only">Name</dt>
-                        <dd className="text-gray-900 dark:text-gray-100">{author.name}</dd>
-                        <dt className="sr-only">Twitter</dt>
-                        <dd>
-                          {author.twitter && (
-                            <Link
-                              href={author.twitter}
-                              className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                            >
-                              {author.twitter
-                                .replace('https://twitter.com/', '@')
-                                .replace('https://x.com/', '@')}
-                            </Link>
-                          )}
-                        </dd>
-                      </dl>
-                    </li>
+              ))}
+              {tags && (
+                <div className="mt-6 hidden border-t border-gray-200 pt-5 lg:block dark:border-gray-800">
+                  <p className="mb-3 text-xs font-semibold tracking-[0.14em] text-gray-500 uppercase">
+                    Topics
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <Tag key={tag} text={tag} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </aside>
+
+            <div className="min-w-0">
+              <div className="prose dark:prose-invert max-w-none">{children}</div>
+
+              {tags && (
+                <div className="mt-10 flex flex-wrap gap-2 border-t border-gray-200 pt-6 lg:hidden dark:border-gray-800">
+                  {tags.map((tag) => (
+                    <Tag key={tag} text={tag} />
                   ))}
-                </ul>
-              </dd>
-            </dl>
-            <div className="divide-y divide-gray-200 xl:col-span-3 xl:row-span-2 xl:pb-0 dark:divide-gray-700">
-              <div className="prose dark:prose-invert max-w-none pt-10 pb-8">{children}</div>
-              <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">
-                <Link href={discussUrl(path)} rel="nofollow">
-                  Discuss on Twitter
-                </Link>
-                {` • `}
-                <Link href={editUrl(filePath)}>View on GitHub</Link>
-              </div>
+                </div>
+              )}
+
               {siteMetadata.comments && (
                 <div
-                  className="pt-6 pb-6 text-center text-gray-700 dark:text-gray-300"
+                  className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800"
                   id="comment"
                 >
                   <Comments slug={slug} />
                 </div>
               )}
             </div>
-            <footer>
-              <div className="divide-gray-200 text-sm leading-5 font-medium xl:col-start-1 xl:row-start-2 xl:divide-y dark:divide-gray-700">
-                {tags && (
-                  <div className="py-4 xl:py-8">
-                    <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                      Tags
-                    </h2>
-                    <div className="flex flex-wrap">
-                      {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {(next || prev) && (
-                  <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
-                    {prev && prev.path && (
-                      <div>
-                        <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                          Previous Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${prev.path}`}>{prev.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                    {next && next.path && (
-                      <div>
-                        <h2 className="text-xs tracking-wide text-gray-500 uppercase dark:text-gray-400">
-                          Next Article
-                        </h2>
-                        <div className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                          <Link href={`/${next.path}`}>{next.title}</Link>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="pt-4 xl:pt-8">
-                <Link
-                  href={`/${basePath}`}
-                  className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                  aria-label="Back to the blog"
-                >
-                  &larr; Back to the blog
-                </Link>
-              </div>
-            </footer>
           </div>
         </div>
+
+        <footer className="mx-auto mt-16 max-w-5xl border-t border-gray-200 pt-8 dark:border-gray-800">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {prev && prev.path ? (
+              <Link href={`/${prev.path}`} className="card-surface group p-6">
+                <span className="text-xs font-semibold tracking-[0.12em] text-gray-500 uppercase">
+                  이전 글
+                </span>
+                <span className="font-display group-hover:text-primary-700 dark:group-hover:text-primary-400 mt-3 block text-2xl leading-tight tracking-[-0.03em]">
+                  {prev.title}
+                </span>
+              </Link>
+            ) : (
+              <div />
+            )}
+            {next && next.path && (
+              <Link href={`/${next.path}`} className="card-surface group p-6 sm:text-right">
+                <span className="text-xs font-semibold tracking-[0.12em] text-gray-500 uppercase">
+                  다음 글
+                </span>
+                <span className="font-display group-hover:text-primary-700 dark:group-hover:text-primary-400 mt-3 block text-2xl leading-tight tracking-[-0.03em]">
+                  {next.title}
+                </span>
+              </Link>
+            )}
+          </div>
+          <Link
+            href={`/${basePath}`}
+            className="text-link mt-8 inline-flex"
+            aria-label="글 목록으로 돌아가기"
+          >
+            ← 글 목록으로
+          </Link>
+        </footer>
       </article>
-    </SectionContainer>
+    </>
   )
 }

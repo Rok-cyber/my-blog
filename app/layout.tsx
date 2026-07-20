@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     url: './',
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
-    locale: 'en_US',
+    locale: 'ko_KR',
     type: 'website',
   },
   alternates: {
@@ -77,22 +77,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link
         rel="mask-icon"
         href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#5bbad5"
+        color="#cc785c"
       />
-      <meta name="msapplication-TileColor" content="#000000" />
-      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
-      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
+      <meta name="msapplication-TileColor" content="#cc785c" />
+      <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f5" />
+      <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#181715" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+      <body className="bg-gray-50 pl-[calc(100vw-100%)] text-gray-950 antialiased dark:bg-gray-950 dark:text-gray-50">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
-          <SectionContainer>
-            <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+          <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
+            <div className="flex min-h-screen flex-col">
               <Header />
-              <main className="mb-auto">{children}</main>
-            </SearchProvider>
-            <Footer />
-          </SectionContainer>
+              <main className="mb-auto">
+                <SectionContainer>{children}</SectionContainer>
+              </main>
+              <Footer />
+            </div>
+          </SearchProvider>
         </ThemeProviders>
       </body>
     </html>

@@ -1,62 +1,62 @@
 @import 'tailwindcss';
-@plugin "@tailwindcss/forms";
+@plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 @source '../node_modules/pliny';
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Core theme configuration */
 @theme {
-  /* Font families */
   --font-sans:
-    var(--font-space-grotesk, ui-sans-serif), system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    'Pretendard Variable', Pretendard, 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic',
+    ui-sans-serif, system-ui, sans-serif;
+  --font-display:
+    'Noto Serif KR', 'Nanum Myeongjo', AppleMyungjo, Batang, 'Iowan Old Style', Georgia, ui-serif,
+    serif;
 
-  /* Colors */
-  /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
-  --color-primary-50: oklch(0.985 0.018 180);
-  --color-primary-100: oklch(0.965 0.044 180);
-  --color-primary-200: oklch(0.925 0.091 180);
-  --color-primary-300: oklch(0.87 0.138 180);
-  --color-primary-400: oklch(0.78 0.152 180);
-  --color-primary-500: oklch(0.72 0.145 180); /* 메인 */
-  --color-primary-600: oklch(0.65 0.125 180); /* hover */
-  --color-primary-700: oklch(0.55 0.1 180);
-  --color-primary-800: oklch(0.47 0.08 180);
-  --color-primary-900: oklch(0.39 0.06 180);
-  --color-primary-950: oklch(0.27 0.045 180);
+  --color-primary-50: #fcf5f2;
+  --color-primary-100: #f7e8e1;
+  --color-primary-200: #efd0c3;
+  --color-primary-300: #e3ad98;
+  --color-primary-400: #d88e71;
+  --color-primary-500: #cc785c;
+  --color-primary-600: #b96448;
+  --color-primary-700: #a04f38;
+  --color-primary-800: #843f30;
+  --color-primary-900: #6d372c;
+  --color-primary-950: #3a1914;
 
-  --color-gray-50: oklch(0.985 0.002 247.839);
-  --color-gray-100: oklch(0.967 0.003 264.542);
-  --color-gray-200: oklch(0.928 0.006 264.531);
-  --color-gray-300: oklch(0.872 0.01 258.338);
-  --color-gray-400: oklch(0.707 0.022 261.325);
-  --color-gray-500: oklch(0.551 0.027 264.364);
-  --color-gray-600: oklch(0.446 0.03 256.802);
-  --color-gray-700: oklch(0.373 0.034 259.733);
-  --color-gray-800: oklch(0.278 0.033 256.848);
-  --color-gray-900: oklch(0.21 0.034 264.665);
-  --color-gray-950: oklch(0.13 0.028 261.692);
+  --color-accent-50: #effaf7;
+  --color-accent-100: #d8f2ec;
+  --color-accent-200: #b4e5da;
+  --color-accent-300: #83d2c2;
+  --color-accent-400: #5db8a6;
+  --color-accent-500: #3f9c8b;
+  --color-accent-600: #327d70;
+  --color-accent-700: #2b655c;
+  --color-accent-800: #275149;
+  --color-accent-900: #23433e;
 
-  /* Line heights */
+  --color-gray-50: #faf9f5;
+  --color-gray-100: #f5f0e8;
+  --color-gray-200: #e6dfd8;
+  --color-gray-300: #d2cac1;
+  --color-gray-400: #aaa198;
+  --color-gray-500: #78736d;
+  --color-gray-600: #5b5752;
+  --color-gray-700: #45413d;
+  --color-gray-800: #2d2a27;
+  --color-gray-900: #252320;
+  --color-gray-950: #181715;
+
   --line-height-11: 2.75rem;
   --line-height-12: 3rem;
   --line-height-13: 3.25rem;
   --line-height-14: 3.5rem;
 
-  /* Z-index values */
   --z-60: 60;
   --z-70: 70;
   --z-80: 80;
 }
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -66,54 +66,159 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    min-height: 100vh;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--color-primary-200);
+    color: var(--color-gray-950);
+  }
+
   a,
   button {
     outline-color: var(--color-primary-500);
   }
 
   a:focus-visible,
-  button:focus-visible {
-    outline: 2px solid;
-    border-radius: var(--radius-sm);
-    outline-color: var(--color-primary-500);
+  button:focus-visible,
+  input:focus-visible {
+    border-radius: 0.375rem;
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .button-primary {
+    @apply bg-primary-500 hover:bg-primary-600 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold text-white transition-colors;
+  }
+
+  .button-secondary {
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-800 transition-colors hover:border-gray-500 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-900;
+  }
+
+  .eyebrow {
+    @apply text-primary-600 dark:text-primary-400 text-xs font-semibold tracking-[0.18em] uppercase;
+  }
+
+  .section-title {
+    @apply font-display text-4xl leading-tight tracking-[-0.045em] text-gray-950 sm:text-5xl dark:text-gray-50;
+  }
+
+  .text-link {
+    @apply text-primary-700 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 items-center gap-2 text-sm font-semibold transition-colors;
+  }
+
+  .card-surface {
+    @apply rounded-xl border border-gray-200 bg-gray-100 transition-colors hover:border-gray-300 dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700;
   }
 }
 
 @layer utilities {
   .prose {
+    --tw-prose-body: var(--color-gray-700);
+    --tw-prose-headings: var(--color-gray-950);
+    --tw-prose-lead: var(--color-gray-600);
+    --tw-prose-links: var(--color-primary-700);
+    --tw-prose-bold: var(--color-gray-950);
+    --tw-prose-counters: var(--color-gray-500);
+    --tw-prose-bullets: var(--color-primary-400);
+    --tw-prose-hr: var(--color-gray-200);
+    --tw-prose-quotes: var(--color-gray-800);
+    --tw-prose-quote-borders: var(--color-primary-400);
+    --tw-prose-captions: var(--color-gray-500);
+    --tw-prose-code: var(--color-primary-800);
+    --tw-prose-th-borders: var(--color-gray-300);
+    --tw-prose-td-borders: var(--color-gray-200);
+    font-size: 1.04rem;
+    line-height: 1.85;
+
     & a {
-      color: var(--color-primary-500);
-      &:hover {
-        color: var(--color-primary-600);
-      }
-      & code {
-        color: var(--color-primary-400);
-      }
-    }
-    & :where(h1, h2) {
-      font-weight: 700;
-      letter-spacing: var(--tracking-tight);
-    }
-    & h3 {
       font-weight: 600;
+      text-decoration-color: var(--color-primary-300);
+      text-underline-offset: 0.18em;
+      &:hover {
+        color: var(--color-primary-900);
+      }
     }
+
+    & :where(h1, h2, h3, h4) {
+      font-family: var(--font-display);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+    }
+
+    & h2 {
+      margin-top: 2.8em;
+      padding-top: 0.4em;
+      font-size: 2rem;
+    }
+
+    & h3 {
+      font-size: 1.5rem;
+    }
+
+    & blockquote {
+      border-left-width: 3px;
+      background: var(--color-gray-100);
+      border-radius: 0 0.75rem 0.75rem 0;
+      padding: 1.1rem 1.4rem;
+      font-style: normal;
+    }
+
+    & img {
+      border-radius: 0.75rem;
+    }
+
     & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+      color: var(--color-primary-800);
+      background: var(--color-primary-50);
+      border-radius: 0.25rem;
+      padding: 0.12em 0.3em;
+    }
+
+    & table {
+      font-size: 0.92rem;
     }
   }
 
   .prose-invert {
-    & a {
-      color: var(--color-primary-500);
-      &:hover {
-        color: var(--color-primary-400);
-      }
-      & code {
-        color: var(--color-primary-400);
-      }
+    --tw-prose-body: var(--color-gray-300);
+    --tw-prose-headings: var(--color-gray-50);
+    --tw-prose-lead: var(--color-gray-400);
+    --tw-prose-links: var(--color-primary-400);
+    --tw-prose-bold: var(--color-gray-50);
+    --tw-prose-counters: var(--color-gray-400);
+    --tw-prose-bullets: var(--color-primary-400);
+    --tw-prose-hr: var(--color-gray-800);
+    --tw-prose-quotes: var(--color-gray-200);
+    --tw-prose-quote-borders: var(--color-primary-500);
+    --tw-prose-captions: var(--color-gray-400);
+    --tw-prose-code: var(--color-primary-300);
+    --tw-prose-th-borders: var(--color-gray-700);
+    --tw-prose-td-borders: var(--color-gray-800);
+
+    & a:hover {
+      color: var(--color-primary-300);
     }
-    & :where(h1, h2, h3, h4, h5, h6) {
-      color: var(--color-gray-100);
+
+    & blockquote {
+      background: var(--color-gray-900);
+    }
+
+    & :where(code):not(pre code) {
+      color: var(--color-primary-300);
+      background: var(--color-gray-900);
     }
   }
 }
@@ -127,7 +232,7 @@
 }
 
 .footnotes {
-  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-700;
+  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-800;
 }
 
 .data-footnote-backref {
@@ -143,11 +248,10 @@
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* https://stackoverflow.com/questions/61083813/how-to-avoid-internal-autofill-selected-style-to-be-applied */
 input:-webkit-autofill,
 input:-webkit-autofill:focus {
   transition:
@@ -160,9 +264,9 @@ input:-webkit-autofill:focus {
 }
 
 .content-header-link {
-  opacity: 0;
   margin-left: -24px;
   padding-right: 4px;
+  opacity: 0;
 }
 
 .content-header:hover .content-header-link,

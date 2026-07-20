@@ -1,15 +1,16 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Seongrok Lee Blog',
+  title: 'Seongrok Lee',
   author: 'Seongrok Lee',
-  headerTitle: "Rok's Blog",
-  description: 'Portfolio, projects, and notes on AI & software development',
-  language: 'en-us',
-  theme: 'light', // system, dark or light
-  siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
-  siteRepo: 'https://github.com/timlrx/tailwind-nextjs-starter-blog',
-  siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
+  headerTitle: 'Seongrok Lee',
+  description:
+    'AI 시스템과 거버넌스를 중심으로, 소프트웨어 구현과 도시·공공 영역의 적용을 탐구하는 글과 프로젝트.',
+  language: 'ko-KR',
+  theme: 'system', // system, dark or light
+  siteUrl: 'https://www.seongroklee.com',
+  siteRepo: 'https://github.com/Rok-cyber/my-blog',
+  siteLogo: `${process.env.BASE_PATH || ''}/static/images/avatar.png`,
+  socialBanner: `${process.env.BASE_PATH || ''}/og.png`,
   email: 'rockbnoc@gmail.com',
   github: 'https://github.com/Rok-cyber',
   facebook: '',
@@ -18,9 +19,9 @@ const siteMetadata = {
   instagram: 'https://www.instagram.com/rok_801/?__pwa=1',
   medium: '',
   bluesky: '',
-  locale: 'en-US',
+  locale: 'ko-KR',
   // set to true if you want a navbar fixed to the top
-  stickyNav: false,
+  stickyNav: true,
   analytics: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.
@@ -33,7 +34,7 @@ const siteMetadata = {
       // Remember to add 'us.umami.is' in `next.config.js` as a permitted domain for the CSP
     },
     // plausibleAnalytics: {
-    //   plausibleDataDomain: '', // e.g. tailwind-nextjs-starter-blog.vercel.app
+    //   plausibleDataDomain: '', // e.g. www.seongroklee.com
     // If you are hosting your own Plausible.
     //   src: '', // e.g. https://plausible.my-domain.com/js/script.js
     // },
@@ -45,11 +46,7 @@ const siteMetadata = {
     //   googleAnalyticsId: '', // e.g. G-XXXXXXX
     // },
   },
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
-  },
+  newsletter: {},
   comments: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.
@@ -77,7 +74,7 @@ const siteMetadata = {
       // example: https://giscus.app/themes/custom_example.css
       themeURL: '',
       // This corresponds to the `data-lang="en"` in giscus's configurations
-      lang: 'en',
+      lang: 'ko',
     },
   },
   search: {

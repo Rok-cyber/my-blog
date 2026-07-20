@@ -2,55 +2,47 @@ import Image from './Image'
 import Link from './Link'
 
 const Card = ({ title, description, imgSrc, href }) => (
-  <div className="md max-w-[544px] p-4 md:w-1/2">
-    <div
-      className={`${
-        imgSrc && 'h-full'
-      } overflow-hidden rounded-md border-2 border-gray-200/60 dark:border-gray-700/60`}
-    >
+  <article className="card-surface group overflow-hidden">
+    <div className="flex h-full flex-col">
       {imgSrc &&
         (href ? (
-          <Link href={href} aria-label={`Link to ${title}`}>
+          <Link href={href} aria-label={`${title} 보기`} className="overflow-hidden">
             <Image
               alt={title}
               src={imgSrc}
-              className="object-cover object-center md:h-36 lg:h-48"
+              className="aspect-[16/10] w-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.025]"
               width={544}
-              height={306}
+              height={340}
             />
           </Link>
         ) : (
           <Image
             alt={title}
             src={imgSrc}
-            className="object-cover object-center md:h-36 lg:h-48"
+            className="aspect-[16/10] w-full object-cover object-center"
             width={544}
-            height={306}
+            height={340}
           />
         ))}
-      <div className="p-6">
-        <h2 className="mb-3 text-2xl leading-8 font-bold tracking-tight">
+      <div className="flex flex-1 flex-col p-7">
+        <h2 className="font-display mb-4 text-3xl leading-tight tracking-[-0.04em]">
           {href ? (
-            <Link href={href} aria-label={`Link to ${title}`}>
+            <Link href={href} aria-label={`${title} 보기`}>
               {title}
             </Link>
           ) : (
             title
           )}
         </h2>
-        <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="mb-7 flex-1 leading-7 text-gray-600 dark:text-gray-400">{description}</p>
         {href && (
-          <Link
-            href={href}
-            className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400 text-base leading-6 font-medium"
-            aria-label={`Link to ${title}`}
-          >
-            Learn more &rarr;
+          <Link href={href} className="text-link inline-flex" aria-label={`${title} 자세히 보기`}>
+            자세히 보기 <span aria-hidden="true">→</span>
           </Link>
         )}
       </div>
     </div>
-  </div>
+  </article>
 )
 
 export default Card
