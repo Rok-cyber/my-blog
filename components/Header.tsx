@@ -30,7 +30,7 @@ const Header = () => {
   }
 
   return (
-    <header className={headerClass}>
+    <header className={`${headerClass} site-header`}>
       <SectionContainer>
         <div className="flex h-16 items-center justify-between sm:h-[72px]">
           <Link

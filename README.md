@@ -27,6 +27,7 @@ yarn serve
 
 - 한국어 글: `data/blog/*.mdx`
 - 영어 AI Outlook: `data/blog/en/*.mdx`
+- 레쥬메 데이터: `data/resumeData.ts`
 - 작성자 소개: `data/authors/default.mdx`
 - 프로젝트: `data/projectsData.ts`
 - 사이트 메타데이터: `data/siteMetadata.js`

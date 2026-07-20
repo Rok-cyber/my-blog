@@ -6,7 +6,8 @@ import { genPageMetadata } from 'app/seo'
 
 export const metadata = genPageMetadata({
   title: 'About',
-  description: 'About Seongrok Lee and the perspective behind the biweekly AI outlook.',
+  description:
+    'About Seongrok Lee: software engineer, Columbia AI graduate student, and builder of production AI systems.',
   locale: 'en',
   alternates: {
     canonical: '/en/about',

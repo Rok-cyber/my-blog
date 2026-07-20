@@ -10,7 +10,7 @@ export default function Footer() {
   const isEnglish = localeFromPathname(usePathname()) === 'en'
 
   return (
-    <footer className="mt-24 bg-gray-950 text-gray-100">
+    <footer className="site-footer mt-24 bg-gray-950 text-gray-100">
       <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.5fr_1fr] lg:px-10 lg:py-16">
         <div>
           <p className="text-primary-400 mb-4 text-xs font-semibold tracking-[0.18em] uppercase">
@@ -33,6 +33,9 @@ export default function Footer() {
             <Link href={isEnglish ? '/en/blog' : '/blog'}>{isEnglish ? 'Writing' : '글'}</Link>
             <Link href={isEnglish ? '/en/projects' : '/projects'}>
               {isEnglish ? 'Projects' : '프로젝트'}
+            </Link>
+            <Link href={isEnglish ? '/en/resume' : '/resume'}>
+              {isEnglish ? 'Résumé' : '레쥬메'}
             </Link>
             <Link href={isEnglish ? '/en/about' : '/about'}>{isEnglish ? 'About' : '소개'}</Link>
           </div>

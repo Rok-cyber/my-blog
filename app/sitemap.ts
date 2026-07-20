@@ -20,11 +20,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'projects',
     'tags',
     'about',
+    'resume',
     'en',
     'en/blog',
     'en/projects',
     'en/tags',
     'en/about',
+    'en/resume',
   ].map((route) => ({
     url: `${siteUrl}/${route}`,
     lastModified: new Date().toISOString().split('T')[0],
