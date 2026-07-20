@@ -6,6 +6,7 @@ import { allBlogs } from 'contentlayer/generated'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
+import { isKoreanPost } from '@/lib/i18n'
 
 const POSTS_PER_PAGE = 5
 
@@ -37,7 +38,15 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
   const tag = decodeURIComponent(params.tag)
   const tagLabel = Object.keys(tagData).find((key) => slug(key) === tag) || tag
   const filteredPosts = allCoreContent(
-    sortPosts(allBlogs.filter((post) => post.tags && post.tags.map((t) => slug(t)).includes(tag)))
+    sortPosts(
+      allBlogs.filter(
+        (post) =>
+          isKoreanPost(post) &&
+          !post.draft &&
+          post.tags &&
+          post.tags.map((t) => slug(t)).includes(tag)
+      )
+    )
   )
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
   const initialDisplayPosts = filteredPosts.slice(0, POSTS_PER_PAGE)

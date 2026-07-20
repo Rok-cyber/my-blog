@@ -192,7 +192,7 @@
     }
   }
 
-  .prose-invert {
+  .dark .prose {
     --tw-prose-body: var(--color-gray-300);
     --tw-prose-headings: var(--color-gray-50);
     --tw-prose-lead: var(--color-gray-400);

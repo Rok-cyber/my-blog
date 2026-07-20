@@ -6,4 +6,12 @@ const headerNavLinks = [
   { href: '/about', title: '소개' },
 ]
 
+export const englishHeaderNavLinks = [
+  { href: '/en', title: 'Home' },
+  { href: '/en/blog', title: 'Writing' },
+  { href: '/en/tags', title: 'Topics' },
+  { href: '/en/projects', title: 'Projects' },
+  { href: '/en/about', title: 'About' },
+]
+
 export default headerNavLinks

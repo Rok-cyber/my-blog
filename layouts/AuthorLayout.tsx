@@ -6,20 +6,24 @@ import Image from '@/components/Image'
 interface Props {
   children: ReactNode
   content: Omit<Authors, '_id' | '_raw' | 'body'>
+  locale?: 'ko' | 'en'
 }
 
-export default function AuthorLayout({ children, content }: Props) {
+export default function AuthorLayout({ children, content, locale = 'ko' }: Props) {
   const { name, avatar, occupation, company, email, linkedin, github } = content
+  const isEnglish = locale === 'en'
 
   return (
     <>
-      <div className="py-14 sm:py-20">
+      <div lang={isEnglish ? 'en' : 'ko'} className="py-14 sm:py-20">
         <div className="max-w-4xl">
           <p className="eyebrow">About</p>
           <h1 className="font-display mt-4 text-5xl leading-[1.05] tracking-[-0.055em] sm:text-7xl">
-            AI를 중심으로,
+            {isEnglish ? 'AI systems first,' : 'AI를 중심으로,'}
             <span className="text-primary-600 dark:text-primary-400 block">
-              실제 세계에 작동할 구조를 찾습니다.
+              {isEnglish
+                ? 'with a clear view of what comes next.'
+                : '실제 세계에 작동할 구조를 찾습니다.'}
             </span>
           </h1>
         </div>
@@ -28,7 +32,7 @@ export default function AuthorLayout({ children, content }: Props) {
             {avatar && (
               <Image
                 src={avatar}
-                alt={`${name} 프로필 사진`}
+                alt={isEnglish ? `${name} profile` : `${name} 프로필 사진`}
                 width={320}
                 height={320}
                 className="aspect-square w-full rounded-xl object-cover"

@@ -4,9 +4,14 @@ import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/re
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Fragment, useState, useEffect, useRef } from 'react'
 import Link from './Link'
-import headerNavLinks from '@/data/headerNavLinks'
 
-const MobileNav = () => {
+interface MobileNavProps {
+  links: { href: string; title: string }[]
+  languageHref: string
+  isEnglish: boolean
+}
+
+const MobileNav = ({ links, languageHref, isEnglish }: MobileNavProps) => {
   const [navShow, setNavShow] = useState(false)
   const navRef = useRef(null)
 
@@ -29,7 +34,7 @@ const MobileNav = () => {
   return (
     <>
       <button
-        aria-label="메뉴 열기"
+        aria-label={isEnglish ? 'Open menu' : '메뉴 열기'}
         onClick={onToggleNav}
         className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg md:hidden"
       >
@@ -69,7 +74,7 @@ const MobileNav = () => {
                 <p className="text-primary-600 mb-8 text-xs font-semibold tracking-[0.18em] uppercase">
                   Explore
                 </p>
-                {headerNavLinks.map((link) => (
+                {links.map((link) => (
                   <Link
                     key={link.title}
                     href={link.href}
@@ -79,11 +84,19 @@ const MobileNav = () => {
                     {link.title}
                   </Link>
                 ))}
+                <Link
+                  href={languageHref}
+                  hrefLang={isEnglish ? 'ko' : 'en'}
+                  className="border-primary-300 text-primary-700 dark:border-primary-800 dark:text-primary-300 mt-8 rounded-full border px-4 py-2 text-sm font-semibold"
+                  onClick={onToggleNav}
+                >
+                  {isEnglish ? '한국어로 보기' : 'View in English'}
+                </Link>
               </nav>
 
               <button
                 className="hover:text-primary-600 dark:hover:text-primary-400 fixed top-4 right-4 z-80 flex h-12 w-12 items-center justify-center rounded-lg text-gray-900 dark:text-gray-100"
-                aria-label="메뉴 닫기"
+                aria-label={isEnglish ? 'Close menu' : '메뉴 닫기'}
                 onClick={onToggleNav}
               >
                 <span className="absolute h-px w-6 rotate-45 bg-current" />

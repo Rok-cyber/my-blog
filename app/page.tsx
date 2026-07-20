@@ -2,9 +2,10 @@ import { sortPosts, allCoreContent } from 'pliny/utils/contentlayer'
 import { allBlogs } from 'contentlayer/generated'
 import Main from './Main'
 import Hero from './Hero'
+import { isKoreanPost } from '@/lib/i18n'
 
 export default async function Page() {
-  const sortedPosts = sortPosts(allBlogs)
+  const sortedPosts = sortPosts(allBlogs.filter((post) => isKoreanPost(post) && !post.draft))
   const posts = allCoreContent(sortedPosts)
   return (
     <>

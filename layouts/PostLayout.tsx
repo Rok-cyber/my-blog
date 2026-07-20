@@ -18,15 +18,17 @@ interface LayoutProps {
 }
 
 export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { path, slug, date, title, summary, tags, readingTime } = content
-  const basePath = path.split('/')[0]
+  const { path, slug, date, title, summary, tags, readingTime, language } = content
+  const isEnglish = language === 'en'
+  const locale = isEnglish ? 'en' : 'ko'
+  const listPath = isEnglish ? '/en/blog' : '/blog'
 
   return (
     <>
       <ScrollTopAndComment />
-      <article className="py-14 sm:py-20">
+      <article lang={isEnglish ? 'en' : 'ko'} className="py-14 sm:py-20">
         <header className="mx-auto max-w-5xl text-center">
-          <p className="eyebrow">Field note</p>
+          <p className="eyebrow">{isEnglish ? 'AI outlook' : 'Field note'}</p>
           <h1 className="font-display mt-5 text-[clamp(2.7rem,6vw,5.8rem)] leading-[1.02] tracking-[-0.06em] text-gray-950 dark:text-gray-50">
             {title}
           </h1>
@@ -36,9 +38,12 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             </p>
           )}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-            <time dateTime={date}>{formatDate(date)}</time>
+            <time dateTime={date}>{formatDate(date, isEnglish ? 'en-US' : 'ko-KR')}</time>
             <span aria-hidden="true">·</span>
-            <span>{Math.max(1, Math.round(readingTime?.minutes || 1))}분 읽기</span>
+            <span>
+              {Math.max(1, Math.round(readingTime?.minutes || 1))}{' '}
+              {isEnglish ? 'min read' : '분 읽기'}
+            </span>
             <span aria-hidden="true">·</span>
             <span>{authorDetails.map((author) => author.name).join(', ')}</span>
           </div>
@@ -54,7 +59,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       src={author.avatar}
                       width={56}
                       height={56}
-                      alt={`${author.name} 프로필`}
+                      alt={isEnglish ? `${author.name} profile` : `${author.name} 프로필`}
                       className="h-12 w-12 rounded-full object-cover lg:h-14 lg:w-14"
                     />
                   )}
@@ -63,10 +68,10 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                       {author.name}
                     </p>
                     <Link
-                      href="/about"
+                      href={isEnglish ? '/en/about' : '/about'}
                       className="text-primary-700 dark:text-primary-400 mt-1 text-xs font-medium"
                     >
-                      프로필 보기
+                      {isEnglish ? 'View profile' : '프로필 보기'}
                     </Link>
                   </div>
                 </div>
@@ -78,7 +83,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((tag) => (
-                      <Tag key={tag} text={tag} />
+                      <Tag key={tag} text={tag} locale={locale} />
                     ))}
                   </div>
                 </div>
@@ -91,7 +96,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               {tags && (
                 <div className="mt-10 flex flex-wrap gap-2 border-t border-gray-200 pt-6 lg:hidden dark:border-gray-800">
                   {tags.map((tag) => (
-                    <Tag key={tag} text={tag} />
+                    <Tag key={tag} text={tag} locale={locale} />
                   ))}
                 </div>
               )}
@@ -101,7 +106,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                   className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-800"
                   id="comment"
                 >
-                  <Comments slug={slug} />
+                  <Comments slug={isEnglish ? `en/${slug}` : slug} locale={locale} />
                 </div>
               )}
             </div>
@@ -113,7 +118,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             {prev && prev.path ? (
               <Link href={`/${prev.path}`} className="card-surface group p-6">
                 <span className="text-xs font-semibold tracking-[0.12em] text-gray-500 uppercase">
-                  이전 글
+                  {isEnglish ? 'Previous' : '이전 글'}
                 </span>
                 <span className="font-display group-hover:text-primary-700 dark:group-hover:text-primary-400 mt-3 block text-2xl leading-tight tracking-[-0.03em]">
                   {prev.title}
@@ -125,7 +130,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             {next && next.path && (
               <Link href={`/${next.path}`} className="card-surface group p-6 sm:text-right">
                 <span className="text-xs font-semibold tracking-[0.12em] text-gray-500 uppercase">
-                  다음 글
+                  {isEnglish ? 'Next' : '다음 글'}
                 </span>
                 <span className="font-display group-hover:text-primary-700 dark:group-hover:text-primary-400 mt-3 block text-2xl leading-tight tracking-[-0.03em]">
                   {next.title}
@@ -134,11 +139,11 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
             )}
           </div>
           <Link
-            href={`/${basePath}`}
+            href={listPath}
             className="text-link mt-8 inline-flex"
-            aria-label="글 목록으로 돌아가기"
+            aria-label={isEnglish ? 'Back to all writing' : '글 목록으로 돌아가기'}
           >
-            ← 글 목록으로
+            ← {isEnglish ? 'All writing' : '글 목록으로'}
           </Link>
         </footer>
       </article>

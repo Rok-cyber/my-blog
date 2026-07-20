@@ -29,6 +29,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: './',
+    languages: {
+      'ko-KR': '/',
+      'en-US': '/en',
+    },
     types: {
       'application/rss+xml': `${siteMetadata.siteUrl}/feed.xml`,
     },
