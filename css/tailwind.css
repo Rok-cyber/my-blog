@@ -278,3 +278,26 @@ input:-webkit-autofill:focus {
   display: inline-block;
   vertical-align: middle;
 }
+
+@media print {
+  .site-header,
+  .site-footer,
+  .resume-actions {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: white !important;
+    color: #181715 !important;
+  }
+
+  .resume-page {
+    padding-block: 0 !important;
+  }
+
+  .resume-page section,
+  .resume-page aside {
+    break-inside: avoid;
+  }
+}

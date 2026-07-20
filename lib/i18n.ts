@@ -17,6 +17,7 @@ export function getLanguageSwitchHref(
     if (pathname === '/en/tags') return '/tags'
     if (pathname.startsWith('/en/tags/')) return '/tags'
     if (pathname === '/en/projects') return '/projects'
+    if (pathname === '/en/resume') return '/resume'
     if (pathname === '/en/about') return '/about'
     return '/'
   }
@@ -27,6 +28,7 @@ export function getLanguageSwitchHref(
   if (pathname === '/tags') return '/en/tags'
   if (pathname.startsWith('/tags/')) return '/en/tags'
   if (pathname === '/projects') return '/en/projects'
+  if (pathname === '/resume') return '/en/resume'
   if (pathname === '/about') return '/en/about'
   return '/en'
 }

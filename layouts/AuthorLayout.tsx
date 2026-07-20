@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import type { Authors } from 'contentlayer/generated'
 import SocialIcon from '@/components/social-icons'
 import Image from '@/components/Image'
+import Link from '@/components/Link'
 
 interface Props {
   children: ReactNode
@@ -19,13 +20,19 @@ export default function AuthorLayout({ children, content, locale = 'ko' }: Props
         <div className="max-w-4xl">
           <p className="eyebrow">About</p>
           <h1 className="font-display mt-4 text-5xl leading-[1.05] tracking-[-0.055em] sm:text-7xl">
-            {isEnglish ? 'AI systems first,' : 'AI를 중심으로,'}
+            {isEnglish ? 'Building AI systems,' : 'AI를 시스템으로 만들고,'}
             <span className="text-primary-600 dark:text-primary-400 block">
-              {isEnglish
-                ? 'with a clear view of what comes next.'
-                : '실제 세계에 작동할 구조를 찾습니다.'}
+              {isEnglish ? 'then proving them in the real world.' : '실제 운영에서 검증합니다.'}
             </span>
           </h1>
+          <div className="mt-8 flex flex-wrap gap-3 print:hidden">
+            <Link href={isEnglish ? '/en/resume' : '/resume'} className="button-primary">
+              {isEnglish ? 'View résumé' : '레쥬메 보기'} <span aria-hidden="true">→</span>
+            </Link>
+            <Link href={`mailto:${email}`} className="button-secondary">
+              {isEnglish ? 'Get in touch' : '연락하기'}
+            </Link>
+          </div>
         </div>
         <div className="mt-14 grid items-start gap-10 border-t border-gray-200 pt-10 lg:grid-cols-[320px_1fr] lg:gap-16 dark:border-gray-800">
           <aside className="rounded-2xl bg-gray-100 p-7 dark:bg-gray-900">
